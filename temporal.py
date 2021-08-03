@@ -8,9 +8,17 @@ This is a temporary script file.
 
 import cv2
 import numpy as np
-#from ffpyplayer.player import MediaPlayer as mply 
 from skimage import measure
 import csv
+
+from tkinter import *
+from tkinter import filedialog
+
+def open_file():
+    file_path = filedialog.askopenfilename()
+    return file_path
+
+#button=Button(root, text="open", command=open).pack()
 
 #Defining the mean squared error
 def mse(imga,imgb):
@@ -23,7 +31,11 @@ def mse(imga,imgb):
 def main():
     
     # module 1: Read the frame from the video and init var
-    cap = cv2.VideoCapture("C:\\Users\\yuvar\\Documents\\temporal_vc\\input_video\\srcrec.mp4")
+    root = Tk()
+    filepath=open_file()
+    print("FIle_Path : "+filepath)
+    root.mainloop()
+    cap = cv2.VideoCapture(filepath)
     check,current_frame = cap.read()
     
     #Initializing the variables
@@ -73,7 +85,7 @@ def main():
             else:
                 frame_list.append(current_frame)
                 counter+=1
-                #subtraction
+        #subtraction
         else:
             diff =cv2.subtract(frame_list[counter],current_frame)
             b,g,r = cv2.split(diff)
@@ -106,14 +118,7 @@ def main():
 
         out_writer.writerow(frame_no)
     out_file.close()
-    """
-    if(choice==3):
-        name="_ssmi.mp4"
-    elif(choice==2):
-        name="_mse.mp4"
-    else:
-        name="_diff.mp4"
-    """ 
+    
     
     pathout="C:/Users/yuvar/Documents/temporal_vc/outputs/keyframesvid.mp4"
     height, width, layers = shape
